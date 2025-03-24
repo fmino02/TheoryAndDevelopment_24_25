@@ -1,7 +1,7 @@
 clc
 clear
 %parametro geometrico variabile
-delta=0;
+delta=0.5;
 %parametri geometrici fissi del canale
 H0=1;
 L=10;
@@ -22,7 +22,7 @@ end
 Nx=2*Nx;
 %definizione delle dimensioni dei volumi finiti
 dx=L/Nx;
-dy=abs(delta)*(L/2)*dx;
+dy=(abs(delta)/(L/2))*dx;
 if delta == 0
     dy = dx;
 end
