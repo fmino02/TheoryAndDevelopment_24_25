@@ -1,76 +1,63 @@
 function [B]=vf2d(t,ck)
-parameters2d_finite_differences
+parameters_delta_0
 
 for i=1:Nx
-    for j=1:Nz
-        k=(i-1)*Nz+j;
+    for j=1:Ny
+        k=(i-1)*Ny+j;
         c(i,j)=ck(k);
     end
 end
 
-dx=(L/H)/(Nx);
-dz=H/(Nz);
-for j=1:Nz
-    z(j)=j*dz;
-    f(j)=6*z(j)*(1-z(j)); %need to find expression for the flowrate, which
-    %in this case depends only on z
+Lx=L/(Nx);
+Ly=H/(Ny);
+for j=1:Ny
+    y(j)=j*Ly;
+    f(j) = (6 / H) * (- (Ly^2) / 2 + y(j) * Ly - (Ly^3) / (3 * H) ...
+        - (y(j)^2 * Ly) / H + (y(j) * Ly^2) / H);
 end
 
 % internal internal volumes
 for i=2:Nx-1
-    for j=2:Nz-1
-     vf(i,j)=(dz*H0/(dx*Pe))(c(i+1,j)-c(i,j)+x(c(i,j+1)+c(i,j-1))-...
-         f(j)*(c(i,j)-c(i-1,j))/(dx*dz);
+    for j=2:Ny-1
+     vf(i,j)=-H/(Lx*Ly)*(-c(i,j)*f(j)-c(i-1,j)*f(j)+H/Pe*((c(i,j+1)-2*c(i,j)+ ...
+         c(i,j-1))*Lx/Ly+(c(i+1,j)-2*c(i,j)+c(i-1,j)*Ly/Lx)));
     end
 end
-% boundary points A
+% Volumes in contact with the inlet
+i=1;
+for j=1:Ny
+    c(i,j)=c0;
+end
+% Volumes in contact with the top boundary
+j=Ny;
+for i=2:Nx-1
+    vf(i,j)=-H/Lx/Ly*(c(i,j)*f(j)+c(i-1,j)*f(j)-H/Pe*((c(i,j)-c(i,j-1))*Lx/Ly- ...
+        (c(i+1,j)-c(i,j))*Ly/Lx+(c(i,j)-c(i,j-1))*Lx/Ly+(c(i,j)-c(i-1,j))*Ly/Lx));
+end
+% Volumes in contact with the bottom boundary
 j=1;
 for i=2:Nx-1
-    vf(i,j)=(c(i+1,j)-2*c(i,j)+c(i-1,j))/Pe/dx^2+(c(i,j+1)-2*c(i,j)+c(i,j))/Pe/dz^2-...
-         f(j)*(c(i,j)-c(i-1,j))/(dx*dy);
+    vf(i,j)=-H/(Lx*Ly)*(c(i,j)*f(j)-c(i-1,j)*f(j)-H/Pe*((c(i,j+1)-c(i,j))*Lx/Ly- ...
+        (c(i+1,j)-c(i,j))*Ly/Lx-(c(i,j)-c(i-1,j))*Ly/Lx));
 end
-% boundary points C
-j=Nz;
-for i=2:Nx-1
-    vf(i,j)=(c(i+1,j)-2*c(i,j)+c(i-1,j))/Pe/dx^2+(c(i,j)-2*c(i,j)+c(i,j-1))/Pe/dz^2-...
-         f(j)*(c(i,j)-c(i-1,j))/dx;
-end
-% boundary points B
+% volumes in contact with the outlet
 i=Nx;
-for j=2:Nz-1
-    vf(i,j)=(c(i,j)-2*c(i,j)+c(i-1,j))/Pe/dx^2+(c(i,j+1)-2*c(i,j)+c(i,j-1))/Pe/dz^2-...
-         f(j)*(c(i,j)-c(i-1,j))/dx;
-end
-i=1;
-% boundary points D
-for j=2:Nz-1
-    vf(i,j)=(c(i+1,j)-2*c(i,j)+c0)/Pe/dx^2+(c(i,j+1)-2*c(i,j)+c(i,j-1))/Pe/dz^2-...
-         f(j)*(c(i,j)-c0);
+for j=2:Ny-1
+    vf(i,j)=-H/Lx/Ly*(c(i,j)*f(j)-c(i-1,j)*f(j)-H/Pe*((c(i,j+1)-c(i,j))*Lx/Ly- ...
+        (c(i,j)-c(i,j-1))*Lx/Ly-(c(i,j)-c(i-1,j))*Ly/Lx));
 end
 % boundary point E
-i=1;
-j=1;
-vf(i,j)=(c(i+1,j)-2*c(i,j)+c0)/Pe/dx^2+(c(i,j+1)-2*c(i,j)+c(i,j))/Pe/dz^2-...
-      f(j)*(c(i,j)-c0)/dx;
+i=Nx;
+j=Ny;
+vf(i,j)=-H/Lx/Ly*(c(i,j)*f(j)-c(i-1,j)*f(j)-H/Pe*(-(c(i,j)-c(i,j-1))*Lx/Ly-(c(i,j)-c(i-1,j))*Ly/Lx));
 % boundary point F
 i=Nx;
 j=1;
-vf(i,j)=(c(i,j)-2*c(i,j)+c(i-1,j))/Pe/dx^2+(c(i,j+1)-2*c(i,j)+c(i,j))/Pe/dz^2-...
-         f(j)*(c(i,j)-c(i-1,j))/dx;
-% boundary point G
-i=Nx;
-j=Nz;
-vf(i,j)=(c(i,j)-2*c(i,j)+c(i-1,j))/Pe/dx^2+(c(i,j)-2*c(i,j)+c(i,j-1))/Pe/dz^2-...
-         f(j)*(c(i,j)-c(i-1,j))/dx;     
-% boundary point H
-i=1;
-j=Nz;
-vf(i,j)=(c(i+1,j)-2*c(i,j)+c0)/Pe/dx^2+(c(i,j)-2*c(i,j)+c(i,j-1))/Pe/dz^2-...
-         f(j)*(c(i,j)-c0)/dx;
+vf(i,j)=-H/Lx/Ly*(c(i,j)*f(j)-c(i-1,j)*f(j)-H/Pe*((c(i,j+1)-c(i,j))*Lx/Ly-(c(i,j)-c(i-1,j))*Ly/Lx));
 
 for i=1:Nx
-    for j=1:Nz
-        k=(i-1)*Nz+j;
+    for j=1:Ny
+        k=(i-1)*Ny+j;
         B(k)=vf(i,j);
     end
 end     
