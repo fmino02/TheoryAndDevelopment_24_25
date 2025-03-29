@@ -41,7 +41,35 @@ for l=1:Nt
             cn(i,j,l)=ckn(l,k);
         end
     end
+    H(l)=sum(sum(cn(:,:,l)).*dx.*dy);
 end
+
+for l=1:Nt
+    for j=1:Ny
+        C(j,l)=cn(Nx,j,l);
+    end
+    D(l)=sum(C(:,l))/Ny
+    T(l)=l*dt;
+end
+D1=sum(D.*(1:Nt)*dt)*dt;
+D2=sum(D.*(1:Nt).^2*dt*dt)*dt;
+D3=sum(D.*(1:Nt).^3*dt*dt*dt)*dt;
+Var=D2-D1^2;
+Kur=(D3-3*D1*Var-D1^3)/(Var^(3/2));
+
+figure;
+plot(T, D, 'b', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Concentrazione media outlet');
+title('Grafico di T vs. D');
+grid on;
+
+figure;
+plot(T, H, 'r', 'LineWidth', 2);
+xlabel('Tempo');
+ylabel('Massa totale');
+title('Grafico di T vs. H');
+grid on;
 
 % Plot Initial Condition Surface in a Separate Figure
 figure; % Create new figure for initial condition
