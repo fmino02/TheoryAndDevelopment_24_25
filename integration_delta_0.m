@@ -3,21 +3,21 @@ clear
 parameters_delta_0
 
 Nx
-Nz
+Ny
 dx=(L)/(Nx);
-dz=H/(Nz);
+dy=H/(Ny);
 
 
 
 % initial condition in terms of c(i,j) and ck(k)
 for i=1:Nx
-    for j=1:Nz
-        k=(i-1)*Nz+j;
-        %c(i,j)=0;
+    for j=1:Ny
+        k=(i-1)*Ny+j;
+        c(i,j)=2;
         
         %initial condition for an impulsive injection
         c(3,j)=1/dx;
-        ck(k)=c(i,j);
+       ck(k)=c(i,j);
     end
 end
 ck=ck'
@@ -34,14 +34,14 @@ ode_solver.options = odeset('reltol', 1e-3, 'abstol', 1e-6);
 
 
 x=dx:dx:L;
-z=dz:dz:H;
-[X,Y]=meshgrid(x,z);
+y=dy:dy:H;
+[X,Y]=meshgrid(x,y);
 
 
 for l=1:Nt
     for i=1:Nx
-        for j=1:Nz
-            k=(i-1)*Nz+j;
+        for j=1:Ny
+            k=(i-1)*Ny+j;
             cn(i,j,l)=ckn(l,k);
         end
     end
