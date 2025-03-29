@@ -13,10 +13,12 @@ dy=H/(Ny);
 for i=1:Nx
     for j=1:Ny
         k=(i-1)*Ny+j;
-        c(i,j)=2;
+        c(i,j)=0;
         
         %initial condition for an impulsive injection
-        c(3,j)=1/dx;
+        c(3,j)=1/(H*dx);
+       
+
        ck(k)=c(i,j);
     end
 end
