@@ -18,22 +18,17 @@ for j=1:Ny
 end
 
 % Volumes in contact with the inlet
-for j=1:Ny
-     c(1,j)=c0;
-     %c(2,j)=c0;
-     vf(1,j)=0;
+for j=2:Ny-1
+     vf(1,j)=-H/Lx/Ly*(c(1,j)*f(j)-c0*f(j)+H/Pe*(-(c(1,j+1)-c(1,j))*Lx/Ly+ ...
+        (c(1,j)-c(1,j-1))*Lx/Ly-(c(2,j)-c(1,j))*Ly/Lx));
 end
-% second column of volumes
-%for j=2:Ny-1
-%     vf(2,j)=-H/(Lx*Ly)*(c(2,j)*f(j)-c(2-1,j)*f(j)-H/Pe*((c(2,j+1)-2*c(2,j)+ ...
-%         c(2,j-1))*Lx/Ly+(c(2+1,j)-c(2,j))*Ly/Lx));
-%end
-%j=1;
-%vf(2,j)=-H/(Lx*Ly)*(c(2,j)*f(j)-c(2-1,j)*f(j)-H/Pe*((c(2,j+1)-c(2,j))...
-%    *Lx/Ly+(c(2+1,j)-c(2,j))*Ly/Lx));
-%j=Ny;
-%vf(2,j)=-H/(Lx*Ly)*(c(2,j)*f(j)-c(2-1,j)*f(j)-H/Pe*((-c(2,j)+ ...
- %        c(2,j-1))*Lx/Ly+(c(2+1,j)-c(2,j))*Ly/Lx));
+
+vf(1,1)=-H/Lx/Ly*(c(1,1)*f(1)-c0*f(1)+H/Pe*(-(c(1,2)-c(1,1))*Lx/Ly ...
+    -(c(2,j)-c(1,j))*Ly/Lx));
+
+vf(1,Ny)=-H/Lx/Ly*(c(1,Ny)*f(Ny)-c0*f(Ny)+H/Pe*((c(1,Ny)-c(1,Ny-1))*Lx/Ly- ...
+    (c(2,Ny)-c(1,Ny))*Ly/Lx));
+
 
 % internal internal volumes
 for i=2:Nx-1
