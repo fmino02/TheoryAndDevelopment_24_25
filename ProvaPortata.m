@@ -5,7 +5,7 @@ clear
 delta = 1;
 H0 = 1;
 L = 10;
-Nx0 = 50;
+Nx0 = 500;
 
 % Compute Nx
 Nx = 2*Nx0 * delta / H0;
@@ -47,17 +47,16 @@ x_flow = 0 : dx : L;
 
  H = max(y_flow, [], 1);
 
-for i =1:1:Nx
+for i =1:1:Nx/2
     for j=1:1:Ny(i)
         Q(i,j) = 6 * H0 / (H(i))^2 * ( - dy^2 / 2 + y_flow(i,j) * dy ...
             - dy^3 / (3 * H(i)) - (y_flow(i,j)^2 * dy) / H(i) ...
             + y_flow(i,j) * dy^2 / H(i));
     end
 end
-A=x_flow(1:end-1);
-B=Q(:,100);
 
-
+A=x_flow(1:(end-1)/2);
+B=Q(:,1200);
 plot(A,B)
 
 
