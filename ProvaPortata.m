@@ -5,7 +5,7 @@ clear
 delta = 1;
 H0 = 1;
 L = 10;
-Nx0 = 3;
+Nx0 = 25;
 
 % Compute Nx
 Nx = 2*Nx0 * delta / H0;
@@ -54,7 +54,7 @@ for i =1:1:Nx
             + (y_flow(i,j) * dy^2) / H(i)));
     end
 end
-A=x_flow(1:12);
+A=x_flow(1:end-1);
 B=Q(:,3);
 plot(A,B)
 
