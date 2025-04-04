@@ -47,13 +47,15 @@ x_flow = 0 : dx : L;
 
  H = max(y_flow, [], 1);
 
-for i =1:1:Nx-1
+for i =1:1:Nx
     for j=1:1:Ny(i)
         Q(i,j) = 6 * H0 / ((H(i))^2 * ( - dy^2 / 2 + y_flow(i,j) * dy ...
             - dy^3 / (3 * H(i)) - (y_flow(i,j)^2 * dy) / H(i) ...
             + (y_flow(i,j) * dy^2) / H(i)));
     end
 end
-Q(6,13)=0;
-scatter(y_flow(j,6),Q(6,j))
+A=x_flow(1:12);
+B=Q(:,3);
+plot(A,B)
+
 
