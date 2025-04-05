@@ -47,24 +47,25 @@ x_flow = 0 : dx : L;
 
  H = max(y_flow, [], 1);
 
-for i =1:1:Nx/2
+y__flow=y_flow';
+
+for i =1:1:Nx
     for j=1:1:Ny(i)
-        Q(i,j) = 6 * H0 / (H(i))^2 * ( - dy^2 / 2 + y_flow(i,j) * dy ...
-            - dy^3 / (3 * H(i)) - (y_flow(i,j)^2 * dy) / H(i) ...
-            + y_flow(i,j) * dy^2 / H(i));
+        Q(i,j) = 6 * H0 / (H(i))^2 * ( - dy^2 / 2 + y__flow(i,j) * dy ...
+            - dy^3 / (3 * H(i)) - (y__flow(i,j)^2 * dy) / H(i) ...
+            + y__flow(i,j) * dy^2 / H(i));
     end
 end
 
-y__flow=y_flow';
 
     for j=1:1:Ny(i)
-        F(1,j) = 6 * (y_flow(1,j))^2 * H0 * (-1 / (2 * (H(1))^2) ...
-            + y_flow(1,j) / (3 * (H(1))^3) + 1 / (2 * (H0)^2) ...
-            - y_flow(i,j) / (3 * (H0)^3));
+        F(1,j) = 6 * (y__flow(1,j))^2 * H0 * (-1 / (2 * (H(1))^2) ...
+            + y__flow(1,j) / (3 * (H(1))^3) + 1 / (2 * (H0)^2) ...
+            - y__flow(i,j) / (3 * (H0)^3));
     end
 
 
-for i =2:1:Nx/2
+for i =2:1:Nx
     for j=1:1:Ny(i)
         F(i,j) = 6 * (y__flow(i,j))^2 * H0 * (-1 / (2 * (H(i))^2) ...
             + y__flow(i,j) / (3 * (H(i))^3) + 1 / (2 * (H(i-1))^2) ...
@@ -74,7 +75,7 @@ end
 
 
 figure;
-A=x_flow(1:(end-1)/2);
+A=x_flow(1:(end-1));
 B=Q(:,25);
 plot(A,B)
 xlabel('x');
