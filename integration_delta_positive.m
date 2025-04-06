@@ -45,10 +45,10 @@ for l=1:Nt
 end
 
 for l=1:Nt
-    for j=1:Ny(2*Nx)
+    for j=1:Ny(2*Nx-1)
         C(j,l)=cn(2*Nx,j,l);
     end
-    D(l)=sum(C(:,l))/Ny(2*Nx);
+    D(l)=sum(C(:,l))/Ny(2*Nx-1);
     T(l)=l*dt;
 end
 
