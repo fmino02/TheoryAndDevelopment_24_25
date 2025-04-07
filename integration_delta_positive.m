@@ -45,16 +45,16 @@ for l=1:Nt
 end
 
 for l=1:Nt
-    for j=1:Ny(2*Nx-1)
+    for j=1:Ny(2*Nx)-1
         C(j,l)=cn(2*Nx,j,l);
     end
-    D(l)=sum(C(:,l))/Ny(2*Nx-1);
+    D(l)=sum(C(:,l))/(Ny(2*Nx)-1);
     T(l)=l*dt;
 end
 
 % Save to table for post-processing
-resultsTable = table(T', D', 'VariableNames', {'Time', 'right_concentration'});
-writetable(resultsTable, 'delta_0_Pe_100_matlab.xlsx');
+% resultsTable = table(T', D', 'VariableNames', {'Time', 'right_concentration'});
+% writetable(resultsTable, 'delta_0_Pe_100_matlab.xlsx');
 
 D1=sum(D.*(1:Nt)*dt)*dt;
 D2=sum(D.*(1:Nt).^2*dt*dt)*dt;
