@@ -12,7 +12,7 @@ for i = 1:1:2*Nx
         c(i,j)=0;
         
         %initial condition for an impulsive injection
-        c(3,j)=1/(Ny(3)*dx*dy);
+        c(start,j)=1/(Ny(start)*dx*dy);
        
 
         ck(k)=c(i,j);

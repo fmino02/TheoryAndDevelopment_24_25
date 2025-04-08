@@ -4,7 +4,8 @@ L=10*H0; %length (axial) of the channel
 c0=0; %inlet concentration
 Q0=0;
 Pe=100; %need to study the interval (1-1000)
-Nx=40; %number of divisions in the x direction
+Nx=30; %number of divisions in the x direction
+start=floor(Nx*0.1);
 delta=-0.5*H0;
 dx=(L/2)/(Nx);
 %per rispettare il rapporto tra i lati dei cateti il dy del triangolo è
