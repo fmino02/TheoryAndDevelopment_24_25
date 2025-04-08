@@ -6,6 +6,9 @@ Q0=0;
 Pe=100; %need to study the interval (1-1000)
 Nx=30; %number of divisions in the x direction
 start=floor(Nx*0.1);
+if start==1
+    start=start+1;
+end
 delta=-0.5*H0;
 dx=(L/2)/(Nx);
 %per rispettare il rapporto tra i lati dei cateti il dy del triangolo è
